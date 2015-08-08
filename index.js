@@ -115,6 +115,24 @@ userSchema.methods.isAdmin = function() {
   return this.flags.indexOf('admin') > -1;
 };
 
+userSchema.methods.is = function(wot) {
+  return this.flags.indexOf(wot) > -1;
+};
+
+userSchema.methods.isIn = function isIn(wotList) {
+  if (arguments.length > 1) {
+    return isIn.call(this, arguments);
+  }
+
+  for (let wot of wotList) {
+    if (this.flags.indexOf(wot) > -1) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
 var User = exports.User = mongoose.model('User', userSchema);
 
 class Strategy /* extends passport.Strategy */ {
