@@ -189,11 +189,7 @@ function setup(p) {
     User.findById(id, function(err, user) {
       if (err) { return done(err, null); }
 
-      done(null, {
-        username: user.username,
-        displayName: user.displayName,
-        flags: user.flags
-      });
+      done(null, user);
     });
   });
 

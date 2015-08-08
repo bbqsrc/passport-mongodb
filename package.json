@@ -1,12 +1,13 @@
 {
   "name": "passport-mongodb",
   "version": "1.0.0",
-  "description": "",
+  "description": "A MongoDB strategy and User schema implementation for Passport.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Brendan Molloy <brendan@bbqsrc.net>",
+  "repository": "https://github.com/bbqsrc/passport-mongodb",
   "license": "ISC",
   "devDependencies": {
     "eslint": "^1.0.0",
