@@ -32,7 +32,8 @@ var userSchema = new Schema({
   iterations: Number,
   salt: Schema.Types.Buffer,
   hash: Schema.Types.Buffer,
-  flags: Array
+  flags: Array,
+  data: { type: Schema.Types.Mixed, default: {} }
 });
 
 var defaults = {
@@ -59,7 +60,8 @@ userSchema.statics.createUser = function(username, password, options) {
     let user = new (this.model('User'))({
       username: username.toLowerCase(),
       displayName: username,
-      flags: flags
+      flags: flags,
+      options: options.data
     });
 
     yield user.updatePassword(password, options);
