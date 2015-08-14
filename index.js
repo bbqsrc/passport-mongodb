@@ -23,6 +23,7 @@ function constantTimeEquals(bufferA, bufferB) {
 var userSchema = new Schema({
   username: {
     type: String,
+    index: true,
     unique: true,
     validate: function(v) {
       return v === v.toLowerCase();

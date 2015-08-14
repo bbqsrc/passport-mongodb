@@ -1,6 +1,6 @@
 {
   "name": "passport-mongodb",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A MongoDB strategy and User schema implementation for Passport.",
   "main": "index.js",
   "scripts": {
