@@ -1,6 +1,6 @@
 {
   "name": "passport-mongodb",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "A MongoDB strategy and User schema implementation for Passport.",
   "main": "index.js",
   "scripts": {
@@ -21,6 +21,7 @@
     "passport": "^0.2.2"
   },
   "dependencies": {
+    "buffer-equal-constant-time": "^1.0.1",
     "co": "^4.6.0",
     "mongoose": "^4.1.1",
     "mz": "^2.0.0",

@@ -4,21 +4,8 @@ var passport = require('passport-strategy'),
     crypto = require('mz/crypto'),
     mongoose = require('mongoose'),
     co = require('co'),
+    constantTimeEquals = require('buffer-equal-constant-time'),
     Schema = mongoose.Schema;
-
-// FIXME: It sickens me that I had to write this.
-// https://github.com/joyent/node/issues/8560
-function constantTimeEquals(bufferA, bufferB) {
-  let buflenA = bufferA.length,
-      buflenB = bufferB.length,
-      diff = buflenA ^ buflenB;
-
-  for (let i = 0; i < buflenA && i < buflenB; ++i) {
-    diff |= bufferA[i] ^ bufferB[i];
-  }
-
-  return diff === 0;
-}
 
 var userSchema = new Schema({
   username: {
@@ -62,7 +49,7 @@ userSchema.statics.createUser = function(username, password, options) {
       username: username.toLowerCase(),
       displayName: username,
       flags: flags,
-      options: options.data
+      data: options.data
     });
 
     yield user.updatePassword(password, options);
@@ -118,17 +105,17 @@ userSchema.methods.isAdmin = function() {
   return this.flags.indexOf('admin') > -1;
 };
 
-userSchema.methods.is = function(wot) {
-  return this.flags.indexOf(wot) > -1;
+userSchema.methods.is = function(flag) {
+  return this.flags.indexOf(flag) > -1;
 };
 
-userSchema.methods.isIn = function isIn(wotList) {
+userSchema.methods.isIn = function isIn(flags) {
   if (arguments.length > 1) {
     return isIn.call(this, arguments);
   }
 
-  for (let wot of wotList) {
-    if (this.flags.indexOf(wot) > -1) {
+  for (let flag of flags) {
+    if (this.flags.indexOf(flag) > -1) {
       return true;
     }
   }
@@ -157,8 +144,15 @@ class Strategy /* extends passport.Strategy */ {
         'No req.body; did you forget POST body parsing middleware?'));
     }
 
-    var username = req.body[this._usernameField];
-    var password = req.body[this._passwordField];
+    let body = req.body;
+
+    // Support `koa-better-body`-style parsing
+    if (!body.username && !body.password && body.fields) {
+      body = body.fields;
+    }
+
+    var username = body[this._usernameField];
+    var password = body[this._passwordField];
 
     if (!username || !password) {
       return this.fail({ message: options.badRequestMessage || 'Missing credentials' }, 400);
